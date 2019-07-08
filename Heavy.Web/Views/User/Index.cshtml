@@ -1,0 +1,47 @@
+﻿
+@model IEnumerable<ApplicationUser>
+
+
+<table class="table table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>用户名</th>
+            <th>邮箱</th>
+            <th>身份证号</th>
+            <th>生日</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (ApplicationUser item in Model)
+        {
+            <tr>
+                <th scope="row">@item.Id</th>
+                <td>@item.UserName</td>
+                <td>@item.Email</td>
+                <td>@item.IdCardNo</td>
+                <td>@item.Birthday.ToShortDateString()</td>
+                <td style="width:145px;">
+
+
+                    <a class="btn btn-primary" asp-action="EditUser" asp-route-id="@item.Id">编辑</a>
+
+                    <form action="/User/DeleteUser" method="post" style="display:inline-block">
+                        <input type="hidden" name="id" value="@item.Id" />
+                        <button class="btn btn-danger" type="submit" onclick="return confirm('确定要删除吗')">删除</button>
+                    </form>
+                    @*<a class="btn btn-danger" type="submit" href="javasctipt:return confirm('确定要删除吗')">删除</a>*@
+
+                </td>
+            </tr>
+        }
+
+
+    </tbody>
+</table>
+
+<a class="btn btn-success" asp-action="AddUser">添加用户</a>
+
+
