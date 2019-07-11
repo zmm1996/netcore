@@ -10,7 +10,8 @@ namespace Heavy.Web.Data
         public static List<string> ClaimType { get; set; } = new List<string> {
             "Edit album",
             "Edit user",
-            "Edit role"
+            "Edit role",
+            "Email"
         };
         
 

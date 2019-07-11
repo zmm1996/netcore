@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Heavy.Web.Controllers
 {
-    [Authorize(Policy = "编辑专辑")]
+    // [Authorize(Policy = "编辑专辑")]
+    // [Authorize(Policy = "编辑专辑1")]
+    [Authorize(Policy = "编辑专辑2")]
     public class AlbumController : Controller
     {
         private readonly IAlbumService _albumService;

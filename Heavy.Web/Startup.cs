@@ -9,6 +9,8 @@ using Heavy.Web.Data;
 using Heavy.Web.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Heavy.Web.Data.Auth;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Heavy.Web
 {
@@ -57,11 +59,31 @@ namespace Heavy.Web
 
             //policy授权策略注册
             services.AddAuthorization(options=> {
-                options.AddPolicy("仅限管路员", policy => policy.RequireRole("administrators"));
+                options.AddPolicy("仅限管理员", policy => policy.RequireRole("administrators"));
                 options.AddPolicy("编辑专辑", policy => policy.RequireClaim("Edit album", "Edit album"));
+                //自定义权限认证
+                options.AddPolicy("编辑专辑1", policy => policy.RequireAssertion(context =>
+                {
+                    if (context.User.HasClaim(x => x.Value != "Edit album"))
+                        return true;
+                    return false;
+                }));
+
+                //自定义AddRequirements
+                options.AddPolicy("编辑专辑2", policy => policy.AddRequirements(
+                    //必须全部满足
+                    new EmailRequirement("@163.com"),
+                   new QualifiedUserRequirement()
+                    ));
             });
-            //claims,,
+            services.AddSingleton<IAuthorizationHandler, EmailHandel>();
+            services.AddSingleton<IAuthorizationHandler, AdministratorsHandel >();
+            services.AddSingleton<IAuthorizationHandler, CanEditAlbumHandel >();
+
+
         }
+
+
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {

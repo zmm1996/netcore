@@ -14,7 +14,8 @@ namespace Heavy.Web.Controllers
 {
     //[Authorize(Roles ="administrators")]
     //使用policy策略
-    [Authorize(Policy = "仅限管路员")]
+    [Authorize(Policy = "仅限管理员")]
+   
     public class RoleController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
