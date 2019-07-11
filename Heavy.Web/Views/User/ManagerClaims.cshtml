@@ -1,0 +1,31 @@
+﻿@using Heavy.Web.ViewModels
+@model CreateClaimsViewModel
+
+
+@{ 
+
+    ViewData["title"] = "为用户添加Claims";
+}
+
+<h2>为用户添加Claims</h2>
+
+<form method="post">
+
+    <div class="form-group row">
+        <input name="UserId" type="hidden" value="@Model.UserId" />
+    </div>
+
+    <div class="form-group row">
+
+      
+        <select class="form-control" asp-for="ClaimId" asp-items="@(new SelectList(Model.AllClaims))">
+            <option value="-1">--请选择--</option>
+        </select>
+    </div>
+    <div asp-validation-summary="ModelOnly">
+
+    </div>
+
+    <button type="submit" class="btn btn-primary">提交</button>
+    <a class="btn btn-secondary" asp-action="EditUser" asp-route-id="@Model.UserId">返回列表</a>
+</form>

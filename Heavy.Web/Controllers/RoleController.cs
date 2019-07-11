@@ -12,6 +12,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Heavy.Web.Controllers
 {
+    //[Authorize(Roles ="administrators")]
+    //使用policy策略
+    [Authorize(Policy = "仅限管路员")]
     public class RoleController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -25,7 +28,7 @@ namespace Heavy.Web.Controllers
             this._userManager = _userManager;
         }
 
-        [Authorize]
+       
         public IActionResult Index()
         {
             var roleList = _roleManager.Roles.ToList();

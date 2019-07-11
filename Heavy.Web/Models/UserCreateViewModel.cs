@@ -28,5 +28,8 @@ namespace Heavy.Web.Models
         public DateTime Birthday { get; set; }
 
         public string id { get; set; }
+
+
+        public List<string> ClaimNames { get; set; }
     }
 }

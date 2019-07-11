@@ -35,16 +35,16 @@ namespace Heavy.Web
                     Configuration.GetConnectionString("DefaultConnection")
                     ));
 
-            services.AddIdentity<ApplicationUser,IdentityRole>(options =>
-            {
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequiredLength = 1;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireUppercase = false;
-            }
-                )
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+             {
+                 options.Password.RequireNonAlphanumeric = false;
+                 options.Password.RequiredLength = 1;
+                 options.Password.RequireLowercase = false;
+                 options.Password.RequireUppercase = false;
+             })
                 .AddDefaultUI(UIFramework.Bootstrap4)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
@@ -54,6 +54,13 @@ namespace Heavy.Web
                 });
 
             services.AddScoped<IAlbumService, AlbumEfService>();
+
+            //policy授权策略注册
+            services.AddAuthorization(options=> {
+                options.AddPolicy("仅限管路员", policy => policy.RequireRole("administrators"));
+                options.AddPolicy("编辑专辑", policy => policy.RequireClaim("Edit album", "Edit album"));
+            });
+            //claims,,
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

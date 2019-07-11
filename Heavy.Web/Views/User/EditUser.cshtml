@@ -43,3 +43,16 @@
     <button type="submit" class="btn btn-primary">提交</button>
     <a asp-action="Index" class="btn btn-secondary">返回列表</a>
 </form>
+
+<hr />
+
+<h3>用户的Claims</h3>
+
+<ul>
+    @foreach (var item in Model.ClaimNames)
+    {
+        <li>@item</li>
+    }
+</ul>
+
+<a asp-action="ManagerClaims" asp-route-id="@Model.id" class="btn btn-primary">添加Claim</a>
