@@ -72,13 +72,28 @@ namespace Heavy.Web
                 //自定义AddRequirements
                 options.AddPolicy("编辑专辑2", policy => policy.AddRequirements(
                     //必须全部满足
-                    new EmailRequirement("@163.com"),
+                   // new EmailRequirement("@163.com"),
                    new QualifiedUserRequirement()
                     ));
             });
             services.AddSingleton<IAuthorizationHandler, EmailHandel>();
             services.AddSingleton<IAuthorizationHandler, AdministratorsHandel >();
             services.AddSingleton<IAuthorizationHandler, CanEditAlbumHandel >();
+
+            services.AddAntiforgery(options =>
+            {
+                //生成隐藏字段名
+                options.FormFieldName = "AntiforgeryFieldname";
+                //请求头
+                options.HeaderName = "X-CSRF-TOKEN-HEADERNAME";
+                options.SuppressXFrameOptionsHeader = false;
+            });
+
+            services.AddMvc(options =>
+            {
+                //所有action都使用验证
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
 
 
         }

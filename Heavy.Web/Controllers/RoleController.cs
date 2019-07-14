@@ -15,7 +15,7 @@ namespace Heavy.Web.Controllers
     //[Authorize(Roles ="administrators")]
     //使用policy策略
     [Authorize(Policy = "仅限管理员")]
-   
+
     public class RoleController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -29,7 +29,7 @@ namespace Heavy.Web.Controllers
             this._userManager = _userManager;
         }
 
-       
+
         public IActionResult Index()
         {
             var roleList = _roleManager.Roles.ToList();
@@ -43,6 +43,8 @@ namespace Heavy.Web.Controllers
         }
 
         [HttpPost]
+        //[ValidateAntiForgeryToken]//已使用全局的
+        [IgnoreAntiforgeryToken]//不使用验证
         public async Task<IActionResult> AddRole(CreateRoleViewModel createRoleViewModel)
         {
             if (!ModelState.IsValid)
@@ -84,7 +86,7 @@ namespace Heavy.Web.Controllers
             {
                 Id = role.Id,
                 RoleName = role.Name
-             
+
             };
 
             var userList = _userManager.Users.ToList();
@@ -106,7 +108,6 @@ namespace Heavy.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-
                 return View(editRoleViewModel);
             }
 
@@ -169,17 +170,17 @@ namespace Heavy.Web.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> AddUserToRole(AddUserToRoleViewModel  addUserToRoleViewModel)
+        public async Task<IActionResult> AddUserToRole(AddUserToRoleViewModel addUserToRoleViewModel)
         {
             var role = await _roleManager.FindByIdAsync(addUserToRoleViewModel.RoleId);
             var user = await _userManager.FindByIdAsync(addUserToRoleViewModel.UserId);
 
-            if (role!=null && user!=null)
+            if (role != null && user != null)
             {
-                var result = await _userManager.AddToRoleAsync(user,role.Name);
-                if(result.Succeeded)
+                var result = await _userManager.AddToRoleAsync(user, role.Name);
+                if (result.Succeeded)
                 {
-                    return RedirectToAction("EditRole",new { id=role.Id});
+                    return RedirectToAction("EditRole", new { id = role.Id });
                 }
 
 
@@ -194,19 +195,19 @@ namespace Heavy.Web.Controllers
             {
                 ModelState.AddModelError(string.Empty, "角色或者用户不存在");
             }
-         
+
             return View(addUserToRoleViewModel);
-            
+
         }
 
-        public async Task< IActionResult> DeleteUserToRole(string roleId,string userId)
+        public async Task<IActionResult> DeleteUserToRole(string roleId, string userId)
         {
             var role = await _roleManager.FindByIdAsync(roleId);
             var user = await _userManager.FindByIdAsync(userId);
             if (role != null && user != null)
             {
                 var result = await _userManager.RemoveFromRoleAsync(user, role.Name);
-                if(result.Succeeded)
+                if (result.Succeeded)
                 {
                     return RedirectToAction("EditRole", new { id = roleId });
                 }
@@ -216,10 +217,18 @@ namespace Heavy.Web.Controllers
 
         }
 
-
-
-
-
-
+        [AcceptVerbs("Get","Post")]
+        public async Task<IActionResult> CheckNameExist([Bind("RoleName")] string rolename)
+        {
+            var role = await _roleManager.FindByNameAsync(rolename);
+            if(role!=null)
+            {
+                return Json(false);
+            }
+            return Json(true);
         }
+
+
+
+    }
 }

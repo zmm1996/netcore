@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Heavy.Web.Vilads;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Heavy.Web.ViewModels
@@ -23,6 +24,9 @@ namespace Heavy.Web.ViewModels
 
         [Display(Name = "封面地址")]
         [Required(ErrorMessage = "{0}是必填项"), MaxLength(200, ErrorMessage = "{0}的长度不可超过{1}")]
+        //[DataType(DataType.Url)]
+        [URLValid(ErrorMesage = "url地址不正确")]//自定义
         public string CoverUrl { get; set; }
     }
+
 }

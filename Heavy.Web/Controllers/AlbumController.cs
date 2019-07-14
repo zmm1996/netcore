@@ -17,6 +17,7 @@ namespace Heavy.Web.Controllers
 
         public AlbumController(IAlbumService albumService)
         {
+         
             _albumService = albumService;
         }
 
@@ -99,6 +100,12 @@ namespace Heavy.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int id, AlbumUpdateViewModel albumUpdateViewModel)
         {
+
+            if(!ModelState.IsValid)
+            {
+                return View(albumUpdateViewModel);
+            }
+
             var model = await _albumService.GetByIdAsync(id);
             if (model == null)
             {

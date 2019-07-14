@@ -10,6 +10,10 @@ namespace Heavy.Web.Data.Auth
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, QualifiedUserRequirement requirement)
         {
+
+
+
+
             if (context.User.HasClaim(x => x.Type == "Edit album"))
                 context.Succeed(requirement);
             return Task.CompletedTask;

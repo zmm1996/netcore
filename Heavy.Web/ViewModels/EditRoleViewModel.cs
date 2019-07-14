@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,6 +19,7 @@ namespace Heavy.Web.ViewModels
         [Display(Name ="id")]
         public string Id { get; set; }
         [Required]
+        [BindNever]
         [Display(Name = "角色名称")]
         public string RoleName { get; set; }
         public List<IdentityUser> Users { get; set; }
